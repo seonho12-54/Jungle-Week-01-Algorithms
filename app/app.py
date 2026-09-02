@@ -163,6 +163,12 @@ def check_id():
 
 @app.route("/login", methods=["POST"])
 def login():
+    """
+    Authenticates a user and returns their role on successful login.
+    
+    Returns:
+        Response: A success response containing the user's role and authentication cookies.
+    """
     try:
         user_data = request.get_json()
     except Exception:
