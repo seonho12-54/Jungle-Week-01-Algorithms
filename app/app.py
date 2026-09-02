@@ -49,6 +49,9 @@ app.config["JWT_COOKIE_SECURE"] = True
 
 
 bcrypt = Bcrypt(app)
+_DUMMY_PASSWORD_HASH = (
+    b"$2b$12$ARAKwX7AcYINeARFMOS4eOKtJ7P7D5f1uu.iOxXKS/ifv7zSOyxi6"
+)
 
 
 #####################################################################################
@@ -175,6 +178,7 @@ def login():
 
     user = db.users.find_one({"id": user_id})
     if not user:
+        bcrypt.check_password_hash(_DUMMY_PASSWORD_HASH, user_password)
         abort(401, description="아이디 또는 비밀번호가 틀렸습니다.")
 
     if bcrypt.check_password_hash(user.get("pwd"), user_password):
