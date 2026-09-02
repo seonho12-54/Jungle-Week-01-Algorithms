@@ -422,10 +422,11 @@ def find_report():
 @app.route("/report", methods=["POST"])
 @jwt_required()
 def create_report():
-    data = request.get_json()
+    data = request.get_json(silent=True) or {}
     uid = get_jwt_identity()
     report = {
-        "item": data.get("item"),
+        "item": data.get("item", "unknown"),
+        "message": data.get("message", ""),
         "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "uid": uid,
     }
