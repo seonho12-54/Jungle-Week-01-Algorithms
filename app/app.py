@@ -78,7 +78,9 @@ app.json = CustomJSONProvider(app)
 @jwt.expired_token_loader
 def expired_token_callback(jwt_header, jwt_data):
     if request.cookies.get("refresh_token_cookie"):
-        return redirect(url_for("refresh_and_redirect", next_url=request.url))
+        return redirect(
+            url_for("refresh_and_redirect", next_url=request.full_path.removesuffix("?"))
+        )
 
     response = redirect(url_for("home"))
     unset_jwt_cookies(response)
