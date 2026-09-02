@@ -317,7 +317,12 @@ def find_reserve():
 @app.route("/machine/<machine_type>", methods=["GET"])
 @jwt_required(optional=True)
 def find_machine(machine_type):
-    prefix = "L" if machine_type == "laundry" else "D"
+    if machine_type == "laundry":
+        prefix = "L"
+    elif machine_type == "dryer":
+        prefix = "D"
+    else:
+        abort(400, description="유효한 기계 타입이 아닙니다.")
 
     current_user_id = get_jwt_identity()
     user_info = db.users.find_one({"id": current_user_id}) if current_user_id else None
