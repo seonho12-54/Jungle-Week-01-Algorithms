@@ -283,6 +283,8 @@ def validation_reserve(uid, data_list):
         start_dt = datetime.strptime(req["start"], "%Y-%m-%d %H:%M:%S")
         end_dt = datetime.strptime(req["end"], "%Y-%m-%d %H:%M:%S")
         duration = (end_dt - start_dt).seconds // 60
+        if duration > 120:
+            abort(400, description="한 번에 2시간을 초과할 수 없습니다.")
         request_minutes_by_date[date_key] = (
             request_minutes_by_date.get(date_key, 0) + duration
         )
