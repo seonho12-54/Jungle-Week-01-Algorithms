@@ -88,6 +88,8 @@ def expired_token_callback(jwt_header, jwt_data):
 @app.route("/refresh-redirect", methods=["GET"])
 def refresh_and_redirect():
     next_url = request.args.get("next_url", url_for("home"))
+    if not next_url.startswith("/"):
+        next_url = url_for("home")
     raw_refresh_token = request.cookies.get("refresh_token_cookie")
 
     verify_jwt_in_request(refresh=True)  # 서명 + 만료 검증
