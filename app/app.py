@@ -317,6 +317,19 @@ def find_reserve():
 @app.route("/machine/<machine_type>", methods=["GET"])
 @jwt_required(optional=True)
 def find_machine(machine_type):
+    """
+    Display the machine selection page for laundry or dryer machines.
+    
+    Parameters:
+        machine_type (str): Machine category, either ``"laundry"`` or ``"dryer"``.
+    
+    Returns:
+        Response: Rendered machine selection page with matching machines and their
+        current reservation status.
+    
+    Raises:
+        werkzeug.exceptions.BadRequest: If ``machine_type`` is not supported.
+    """
     if machine_type == "laundry":
         prefix = "L"
     elif machine_type == "dryer":
