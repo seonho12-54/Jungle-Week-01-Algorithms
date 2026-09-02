@@ -385,6 +385,18 @@ def find_machine(machine_type):
 @app.route("/own/<machine_type>", methods=["GET"])
 @jwt_required()
 def find_own_reserve(machine_type):
+    """
+    Find the authenticated user's earliest active or future reservation for a machine category.
+    
+    Parameters:
+    	machine_type (str): Machine category, either "laundry" or "dryer".
+    
+    Returns:
+    	Response: A JSON response containing the reservation and user's name, or `None` when no matching reservation exists.
+    
+    Raises:
+    	BadRequest: If `machine_type` is not a supported machine category.
+    """
     uid = get_jwt_identity()
     machine_type = machine_type.lower()
     if machine_type == "laundry":
