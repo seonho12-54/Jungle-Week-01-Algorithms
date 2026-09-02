@@ -174,18 +174,20 @@ def login():
         abort(400, description="비밀번호가 비어 있습니다.")
 
     user = db.users.find_one({"id": user_id})
-    if user:
-        if bcrypt.check_password_hash(user.get("pwd"), user_password):
-            access_token = create_access_token(identity=user_id)
-            refresh_token = create_refresh_token(identity=user_id)
-            refresh_token_hash(user_id, refresh_token, "new")
+    if not user:
+        abort(401, description="아이디 또는 비밀번호가 틀렸습니다.")
 
-            response = jsonify({"result": "success", "role": user.get("role")})
-            set_access_cookies(response, access_token)
-            set_refresh_cookies(response, refresh_token)
-            return response
-        else:
-            abort(401, description="비밀번호가 틀렸습니다.")
+    if bcrypt.check_password_hash(user.get("pwd"), user_password):
+        access_token = create_access_token(identity=user_id)
+        refresh_token = create_refresh_token(identity=user_id)
+        refresh_token_hash(user_id, refresh_token, "new")
+
+        response = jsonify({"result": "success", "role": user.get("role")})
+        set_access_cookies(response, access_token)
+        set_refresh_cookies(response, refresh_token)
+        return response
+
+    abort(401, description="아이디 또는 비밀번호가 틀렸습니다.")
 
 
 @app.route("/logout", methods=["POST"])
