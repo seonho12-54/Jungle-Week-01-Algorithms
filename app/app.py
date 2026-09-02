@@ -386,7 +386,7 @@ def find_machine(machine_type):
 @jwt_required()
 def find_own_reserve(machine_type):
     uid = get_jwt_identity()
-    prefix = "L" if machine_type == "laundry" else "D"
+    prefix = "L" if machine_type.lower() == "laundry" else "D"
     user = db.users.find_one({"id": uid})
     name = user.get("name")
 
